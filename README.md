@@ -1,1 +1,1 @@
-# Adaptive_NUMA_Scheduler_OpenMP
+# Adaptive NUMA Scheduler OpenMP
