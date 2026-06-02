@@ -34,6 +34,74 @@ The execution script performs the following steps:
 5. Generates a consolidated CSV dataset.
 6. Produces performance figures automatically.
 
+
+## Manual Compilation and Execution
+
+The benchmark workflow automates all compilation and execution steps. However, individual components can also be built and executed manually.
+
+### Compile the SpMV Kernel
+
+```bash
+clang++ -O3 -ffast-math -fopenmp SpMV_Kernel.cpp -o SpMV_Kernel -ldl
+```
+
+### Compile the OMPT Scheduler
+
+```bash
+clang++ -std=c++17 -fPIC -shared -fopenmp -pthread \
+NUMA_scheduler_OMPT.cpp \
+-o NUMA_scheduler.so \
+-I/opt/ohpc/pub/libs/hwloc/include \
+-L/opt/ohpc/pub/libs/hwloc/lib \
+-lhwloc
+```
+
+### Baseline Execution
+
+```bash
+OMP_PLACES=cores \
+OMP_PROC_BIND=spread \
+numactl --interleave=all \
+./SpMV_Kernel matrix.mtx threads repetitions output.csv
+```
+
+Example:
+
+```bash
+OMP_PLACES=cores \
+OMP_PROC_BIND=spread \
+numactl --interleave=all \
+./SpMV_Kernel stokes.mtx 32 100 baseline.csv
+```
+
+### Scheduler Execution
+
+```bash
+OMP_TOOL=enabled \
+OMP_TOOL_LIBRARIES=$PWD/NUMA_scheduler.so \
+numactl --interleave=all \
+./SpMV_Kernel matrix.mtx threads repetitions output.csv
+```
+
+Example:
+
+```bash
+OMP_TOOL=enabled \
+OMP_TOOL_LIBRARIES=$PWD/NUMA_scheduler.so \
+numactl --interleave=all \
+./SpMV_Kernel stokes.mtx 32 100 scheduler.csv
+```
+
+### Command Arguments
+
+| Argument      | Description                                   |
+| ------------- | --------------------------------------------- |
+| `matrix.mtx`  | Matrix Market input file                      |
+| `threads`     | Number of OpenMP threads                      |
+| `repetitions` | Number of benchmark repetitions               |
+| `output.csv`  | Output file used to store performance metrics |
+
+
 ## Outputs
 
 Benchmark results are stored in:
