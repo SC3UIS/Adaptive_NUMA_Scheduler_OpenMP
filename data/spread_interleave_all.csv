@@ -1,0 +1,11 @@
+Configuration,Threads,Scheduler,t_min,stdev_ms,GiB/s,GFLOPS
+Spread and interleave all,8,NO,52.3189,0.4839,78.716,13.353
+Spread and interleave all,8,YES,52.016,1.9447,79.154,13.431
+Spread and interleave all,16,NO,27.5506,0.2421,149.459,25.359
+Spread and interleave all,16,YES,27.4323,2.0383,150.103,25.468
+Spread and interleave all,32,NO,18.755,0.1476,219.564,37.252
+Spread and interleave all,32,YES,24.266,5.9349,170.015,28.789
+Spread and interleave all,64,NO,17.204,0.1302,239.327,40.608
+Spread and interleave all,64,YES,24.1571,5.6349,170.58,28.919
+Spread and interleave all,128,NO,15.486,0.0833,265.865,45.114
+Spread and interleave all,128,YES,16.468,3.7357,250.022,42.424
